@@ -1,5 +1,8 @@
 # cvss
 Certificate Verification Support System
 
-# Install
-npm install
+# Install Node Modules 
+`npm install`
+
+# Run Backend
+`npm start`
