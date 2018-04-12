@@ -361,13 +361,15 @@ exports.CreateAndBroadcastTx = function (privateKey, dataRegister, callback)
 
 			//get raw transaction
 			const signedTransaction = res.rawTransaction;
-			callback(signedTransaction)
+			
 			//broadcast signed transaction
-			return web3.eth.sendSignedTransaction(signedTransaction, (err, res) => {
+			web3.eth.sendSignedTransaction(signedTransaction, (err, res) => {
 
 				console.log(err);
 
 				console.log(res);
+				callback('https://ropsten.etherscan.io/tx/' + res)
+				return res;
 			});
 		}
 	);

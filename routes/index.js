@@ -14,7 +14,7 @@ router.post('/getUserCertHash', function (req, response, next) {
 	const dataRegister = utils.cvssledgerContract.methods.mapCertificates("0x5f31313232333334345f", "0x5f42433130315f").encodeABI()
 	//const dataRegister = utils.cvssledgerContract.methods.registerUser(userHash, userName).encodeABI();
 	privateKey = "0x599d0294d4dc6df206e004b7723c712c801e19efd8b9db553a95d39a3404e99a"
-	utils.CreateAndBroadcastTx(privateKey, dataRegister).then(result => response.json(result))
+	utils.CreateAndBroadcastTx(privateKey, dataRegister,(txID)=> response.json(txID))
 });
 router.post('/registerIssuer', function (req, response, next) {
 	let issuerPubkey = req.body.issuerPubkey.toString()
@@ -30,7 +30,7 @@ router.post('/registerIssuer', function (req, response, next) {
 	const dataRegister = utils.cvssledgerContract.methods.registerIssuer(issuerPubkey, issuerName).encodeABI();
 	privateKey = "0x599d0294d4dc6df206e004b7723c712c801e19efd8b9db553a95d39a3404e99a"
 
-	utils.CreateAndBroadcastTx(privateKey, dataRegister,(signedTransaction)=> response.json(signedTransaction))
+	utils.CreateAndBroadcastTx(privateKey, dataRegister,(txID)=> response.json(txID))
 });
 
 router.post('/registerUser', function (req, response, next) {
@@ -47,7 +47,7 @@ router.post('/registerUser', function (req, response, next) {
 	const dataRegister = utils.cvssledgerContract.methods.registerUser(userHash, userName).encodeABI();
 	privateKey = "0x599d0294d4dc6df206e004b7723c712c801e19efd8b9db553a95d39a3404e99a"
 
-	utils.CreateAndBroadcastTx(privateKey, dataRegister).then(result => response.json(result))
+	utils.CreateAndBroadcastTx(privateKey, dataRegister,(txID)=> response.json(txID))
 });
 //function addCertificate(bytes16 userHash, bytes16 issuerPubkey, bytes16 issuerSignature, bytes16 certHash) public onlyOwner {
 router.post('/addCertificate', function (req, response, next) {
@@ -72,7 +72,7 @@ router.post('/addCertificate', function (req, response, next) {
 
 	const dataRegister = utils.cvssledgerContract.methods.addCertificate(userHash, issuerPubkey, issuerSignature, certHash).encodeABI();
 	privateKey = "0x599d0294d4dc6df206e004b7723c712c801e19efd8b9db553a95d39a3404e99a"
-	utils.CreateAndBroadcastTx(privateKey, dataRegister).then(result => response.json(result))
+	utils.CreateAndBroadcastTx(privateKey, dataRegister,(txID)=> response.json(txID))
 	//response.json(utils.CreateAndBroadcastTx(privateKey, dataRegister))
 });
 module.exports = router;
