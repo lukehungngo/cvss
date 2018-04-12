@@ -372,6 +372,10 @@ exports.CreateAndBroadcastTx = function (privateKey, dataRegister)
 		}
 	);
 }
+exports.QueryTransaction = function (userHash, certHash)
+{
+	
+}
 function addCertificate(ownerHash, issuerPubkey, issuerSignature, certHash) {
 	ownerHash = ownerHash.toString()
 	issuerPubkey = issuerPubkey.toString()
