@@ -340,7 +340,7 @@ exports.cvssledgerContract = new web3.eth.Contract(cvssledgerContractABI, CONTRA
 // Input: 
 //private key of EOA 
 //data want to broadcast
-exports.CreateAndBroadcastTx = function (privateKey, dataRegister)
+exports.CreateAndBroadcastTx = function (privateKey, dataRegister, callback)
 {
 	//var resLink = 'https://ropsten.etherscan.io/tx/'
 	// Create transaction
@@ -361,7 +361,7 @@ exports.CreateAndBroadcastTx = function (privateKey, dataRegister)
 
 			//get raw transaction
 			const signedTransaction = res.rawTransaction;
-
+			callback(signedTransaction)
 			//broadcast signed transaction
 			return web3.eth.sendSignedTransaction(signedTransaction, (err, res) => {
 

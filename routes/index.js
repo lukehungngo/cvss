@@ -2,8 +2,8 @@ var express = require('express');
 var utils = require('./utils.js')
 var router = express.Router();
 Web3 = require('web3')
-//var web3 = new Web3(new Web3.providers.HttpProvider('https://ropsten.infura.io/jEuv2hLiFC9ILI7MvArl'));
-var web3 = new Web3(new Web3.providers.HttpProvider('https://rinkeby.infura.io/TOIiNmTE9VH8TIrRHCib'));
+var web3 = new Web3(new Web3.providers.HttpProvider('https://ropsten.infura.io/jEuv2hLiFC9ILI7MvArl'));
+//var web3 = new Web3(new Web3.providers.HttpProvider('https://rinkeby.infura.io/TOIiNmTE9VH8TIrRHCib'));
 
 /* GET home page. */
 router.get('/', function (req, res, next) {
@@ -30,8 +30,7 @@ router.post('/registerIssuer', function (req, response, next) {
 	const dataRegister = utils.cvssledgerContract.methods.registerIssuer(issuerPubkey, issuerName).encodeABI();
 	privateKey = "0x599d0294d4dc6df206e004b7723c712c801e19efd8b9db553a95d39a3404e99a"
 
-	utils.CreateAndBroadcastTx(privateKey, dataRegister).then(result => response.json(result))
-
+	utils.CreateAndBroadcastTx(privateKey, dataRegister,(signedTransaction)=> response.json(signedTransaction))
 });
 
 router.post('/registerUser', function (req, response, next) {
