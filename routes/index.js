@@ -4,6 +4,8 @@ var router = express.Router();
 Web3 = require('web3')
 var web3 = new Web3(new Web3.providers.HttpProvider('https://ropsten.infura.io/jEuv2hLiFC9ILI7MvArl'));
 //var web3 = new Web3(new Web3.providers.HttpProvider('https://rinkeby.infura.io/TOIiNmTE9VH8TIrRHCib'));
+const privateKey = "0x599d0294d4dc6df206e004b7723c712c801e19efd8b9db553a95d39a3404e99a"
+
 
 /* GET home page. */
 router.get('/', function (req, res, next) {
@@ -11,10 +13,22 @@ router.get('/', function (req, res, next) {
 });
 router.post('/getUserCertHash', function (req, response, next) {
 
-	const dataRegister = utils.cvssledgerContract.methods.mapCertificates("0x5f31313232333334345f", "0x5f42433130315f").encodeABI()
-	//const dataRegister = utils.cvssledgerContract.methods.registerUser(userHash, userName).encodeABI();
-	privateKey = "0x599d0294d4dc6df206e004b7723c712c801e19efd8b9db553a95d39a3404e99a"
-	utils.CreateAndBroadcastTx(privateKey, dataRegister,(txID)=> response.json(txID))
+	//const dataRegister = utils.cvssledgerContract.methods.mapCertificates("0x5f31313232333334345f", "0x5f42433130315f").encodeABI()
+	// var userHash = "0x5f31313232333334345f"
+	// var certHash = "0x5f42433130315f"
+	// const dataRegister = utils.cvssledgerContract.methods.isCertificate(userHash, certHash).encodeABI();
+	// utils.CreateAndBroadcastTx(privateKey, dataRegister,(txID)=> console.log("txID: " + txID))
+	// // var txID = ""
+	utils.QueryTransactionReceipt("0x00b746ee411eab90110fceb879dc28d6ace68437ec77203ae9c5b56a474e974f")
+		.then(result =>
+		{
+			var isCertificate = result.logs[0].data
+			if(isCertificate === "0x0000000000000000000000000000000000000000000000000000000000000001")
+				response.json("Verified")
+			else
+				response.json("UnVerified")
+		})
+
 });
 router.post('/registerIssuer', function (req, response, next) {
 	let issuerPubkey = req.body.issuerPubkey.toString()
@@ -28,7 +42,6 @@ router.post('/registerIssuer', function (req, response, next) {
 	console.log(issuerName + ' ' + typeof (issuerName))
 
 	const dataRegister = utils.cvssledgerContract.methods.registerIssuer(issuerPubkey, issuerName).encodeABI();
-	privateKey = "0x599d0294d4dc6df206e004b7723c712c801e19efd8b9db553a95d39a3404e99a"
 
 	utils.CreateAndBroadcastTx(privateKey, dataRegister,(txID)=> response.json(txID))
 });
@@ -45,7 +58,6 @@ router.post('/registerUser', function (req, response, next) {
 	console.log(userName + ' ' + typeof (userName))
 
 	const dataRegister = utils.cvssledgerContract.methods.registerUser(userHash, userName).encodeABI();
-	privateKey = "0x599d0294d4dc6df206e004b7723c712c801e19efd8b9db553a95d39a3404e99a"
 
 	utils.CreateAndBroadcastTx(privateKey, dataRegister,(txID)=> response.json(txID))
 });
@@ -71,8 +83,9 @@ router.post('/addCertificate', function (req, response, next) {
 	console.log(certHash + ' ' + typeof (certHash))
 
 	const dataRegister = utils.cvssledgerContract.methods.addCertificate(userHash, issuerPubkey, issuerSignature, certHash).encodeABI();
-	privateKey = "0x599d0294d4dc6df206e004b7723c712c801e19efd8b9db553a95d39a3404e99a"
 	utils.CreateAndBroadcastTx(privateKey, dataRegister,(txID)=> response.json(txID))
 	//response.json(utils.CreateAndBroadcastTx(privateKey, dataRegister))
 });
+router.post('/test', function (req, response, next) {
+})
 module.exports = router;

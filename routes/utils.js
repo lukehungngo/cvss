@@ -1,10 +1,6 @@
 var express = require('express');
 Web3 = require('web3')
 var web3 = new Web3(new Web3.providers.HttpProvider('https://ropsten.infura.io/jEuv2hLiFC9ILI7MvArl'));
-var async = require('asyncawait/async');
-var await = require('asyncawait/await');
-var Promise = require('bluebird');
-var fs = Promise.promisifyAll(require('fs')); // adds Async() versions that return promises
 
 exports.ascii_to_hexa = function (str) {
 	var arr1 = [];
@@ -76,16 +72,18 @@ var cvssledgerContractABI = [
 		"type": "function"
 	},
 	{
-		"anonymous": false,
+		"constant": false,
 		"inputs": [
 			{
-				"indexed": false,
-				"name": "issuerPubkey",
+				"name": "userHash",
 				"type": "bytes16"
 			}
 		],
-		"name": "DeleteIssuer",
-		"type": "event"
+		"name": "deleteUser",
+		"outputs": [],
+		"payable": false,
+		"stateMutability": "nonpayable",
+		"type": "function"
 	},
 	{
 		"anonymous": false,
@@ -97,6 +95,18 @@ var cvssledgerContractABI = [
 			}
 		],
 		"name": "DeleteUser",
+		"type": "event"
+	},
+	{
+		"anonymous": false,
+		"inputs": [
+			{
+				"indexed": false,
+				"name": "",
+				"type": "bool"
+			}
+		],
+		"name": "IsCertificate",
 		"type": "event"
 	},
 	{
@@ -146,18 +156,16 @@ var cvssledgerContractABI = [
 		"type": "event"
 	},
 	{
-		"constant": false,
+		"anonymous": false,
 		"inputs": [
 			{
-				"name": "userHash",
+				"indexed": false,
+				"name": "issuerPubkey",
 				"type": "bytes16"
 			}
 		],
-		"name": "deleteUser",
-		"outputs": [],
-		"payable": false,
-		"stateMutability": "nonpayable",
-		"type": "function"
+		"name": "DeleteIssuer",
+		"type": "event"
 	},
 	{
 		"anonymous": false,
@@ -239,6 +247,24 @@ var cvssledgerContractABI = [
 		"outputs": [],
 		"payable": false,
 		"stateMutability": "nonpayable",
+		"type": "function"
+	},
+	{
+		"constant": true,
+		"inputs": [
+			{
+				"name": "userHash",
+				"type": "bytes16"
+			},
+			{
+				"name": "certHash",
+				"type": "bytes16"
+			}
+		],
+		"name": "isCertificate",
+		"outputs": [],
+		"payable": false,
+		"stateMutability": "view",
 		"type": "function"
 	},
 	{
@@ -330,9 +356,10 @@ var cvssledgerContractABI = [
 	}
 ]
 // Contract address
-var CONTRACT_ADDRESS = "0x14fed7ba85f235c468314a67bb590212411ff026"
+exports.CONTRACT_ADDRESS = "0x834aab9d6b24efa9b4e1a2abfe3b9b2c4cdc0e22"
+var CONTRACT_ADDRESS_INTERNAL = "0x834aab9d6b24efa9b4e1a2abfe3b9b2c4cdc0e22"
 // Create Smart Contract using address (in Ethereum Blockhain) and ABI
-exports.cvssledgerContract = new web3.eth.Contract(cvssledgerContractABI, CONTRACT_ADDRESS)
+exports.cvssledgerContract = new web3.eth.Contract(cvssledgerContractABI, CONTRACT_ADDRESS_INTERNAL)
 
 // Function
 // Create transaction with owner private key and data to broadcast
@@ -349,7 +376,7 @@ exports.CreateAndBroadcastTx = function (privateKey, dataRegister, callback)
 		{
 			data: dataRegister,
 			gas: 300000,
-			to: CONTRACT_ADDRESS
+			to: CONTRACT_ADDRESS_INTERNAL
 		},
 		privateKey,
 		function (err, res) {
@@ -368,29 +395,20 @@ exports.CreateAndBroadcastTx = function (privateKey, dataRegister, callback)
 				console.log(err);
 
 				console.log(res);
-				callback('https://ropsten.etherscan.io/tx/' + res)
+				//callback('https://ropsten.etherscan.io/tx/' + res)
+				callback(res)
 				return res;
 			});
 		}
 	);
 }
-exports.QueryTransaction = function (userHash, certHash)
+exports.QueryTransactionReceipt = function (txID)
 {
-	
+	return web3.eth.getTransactionReceipt(txID,function(err,res){
+		console.log(err)
+
+		console.log(res)
+		return res
+	})
 }
-function addCertificate(ownerHash, issuerPubkey, issuerSignature, certHash) {
-	ownerHash = ownerHash.toString()
-	issuerPubkey = issuerPubkey.toString()
-	issuerSignature = issuerSignature.toString()
-	certHash = certHash.toString()
-	cvssledgerContract.addCertificate.sendTransaction(ownerHash, issuerPubkey, issuerSignature, certHash, {
-		from: "0xbfb0574FE1ea0AF7035c31D1D023E1Ae72583c2f",
-		gas: 4000000
-	}, function (error, result) { //get callback from function which is your transaction key
-		if (!error) {
-			console.log(result);
-		} else {
-			console.log(error);
-		}
-	});
-}
+
