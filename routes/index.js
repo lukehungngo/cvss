@@ -11,7 +11,7 @@ const privateKey = "0x599d0294d4dc6df206e004b7723c712c801e19efd8b9db553a95d39a34
 router.get('/', function (req, res, next) {
 	res.json('Nothing to response')
 });
-router.post('/getUserCertHash', function (req, response, next) {
+router.get('/getUserCertHash', function (req, response, next) {
 
 	//const dataRegister = utils.cvssledgerContract.methods.mapCertificates("0x5f31313232333334345f", "0x5f42433130315f").encodeABI()
 	// var userHash = "0x5f31313232333334345f"
