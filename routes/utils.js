@@ -1,4 +1,3 @@
-var express = require('express');
 Web3 = require('web3')
 var web3 = new Web3(new Web3.providers.HttpProvider('https://ropsten.infura.io/jEuv2hLiFC9ILI7MvArl'));
 
@@ -15,23 +14,6 @@ exports.ascii_to_hexa = function (str) {
 // Obtain after deploy Smart Contract to Ethereum
 var cvssledgerContractABI = [
 	{
-		"anonymous": false,
-		"inputs": [
-			{
-				"indexed": true,
-				"name": "previousOwner",
-				"type": "address"
-			},
-			{
-				"indexed": true,
-				"name": "newOwner",
-				"type": "address"
-			}
-		],
-		"name": "OwnershipTransferred",
-		"type": "event"
-	},
-	{
 		"constant": false,
 		"inputs": [
 			{
@@ -39,19 +21,11 @@ var cvssledgerContractABI = [
 				"type": "bytes16"
 			},
 			{
-				"name": "issuerPubkey",
-				"type": "bytes16"
-			},
-			{
-				"name": "issuerSignature",
-				"type": "bytes16"
-			},
-			{
-				"name": "certHash",
+				"name": "userName",
 				"type": "bytes16"
 			}
 		],
-		"name": "addCertificate",
+		"name": "registerUser",
 		"outputs": [],
 		"payable": false,
 		"stateMutability": "nonpayable",
@@ -77,229 +51,24 @@ var cvssledgerContractABI = [
 			{
 				"name": "userHash",
 				"type": "bytes16"
-			}
-		],
-		"name": "deleteUser",
-		"outputs": [],
-		"payable": false,
-		"stateMutability": "nonpayable",
-		"type": "function"
-	},
-	{
-		"anonymous": false,
-		"inputs": [
-			{
-				"indexed": false,
-				"name": "userHash",
-				"type": "bytes16"
-			}
-		],
-		"name": "DeleteUser",
-		"type": "event"
-	},
-	{
-		"anonymous": false,
-		"inputs": [
-			{
-				"indexed": false,
-				"name": "",
-				"type": "bool"
-			}
-		],
-		"name": "IsCertificate",
-		"type": "event"
-	},
-	{
-		"anonymous": false,
-		"inputs": [
-			{
-				"indexed": false,
-				"name": "",
-				"type": "string"
-			}
-		],
-		"name": "LogMessage",
-		"type": "event"
-	},
-	{
-		"anonymous": false,
-		"inputs": [
-			{
-				"indexed": false,
-				"name": "userHash",
-				"type": "bytes16"
-			},
-			{
-				"indexed": false,
-				"name": "userName",
-				"type": "bytes16"
-			}
-		],
-		"name": "RegisterUser",
-		"type": "event"
-	},
-	{
-		"anonymous": false,
-		"inputs": [
-			{
-				"indexed": false,
-				"name": "issuerPubkey",
-				"type": "bytes16"
-			},
-			{
-				"indexed": false,
-				"name": "issuerName",
-				"type": "bytes16"
-			}
-		],
-		"name": "RegisterIssuer",
-		"type": "event"
-	},
-	{
-		"anonymous": false,
-		"inputs": [
-			{
-				"indexed": false,
-				"name": "issuerPubkey",
-				"type": "bytes16"
-			}
-		],
-		"name": "DeleteIssuer",
-		"type": "event"
-	},
-	{
-		"anonymous": false,
-		"inputs": [
-			{
-				"indexed": false,
-				"name": "ownerHash",
-				"type": "bytes16"
-			},
-			{
-				"indexed": false,
-				"name": "userName",
-				"type": "bytes16"
-			},
-			{
-				"indexed": false,
-				"name": "issuerPubkey",
-				"type": "bytes16"
-			},
-			{
-				"indexed": false,
-				"name": "issuerSignature",
-				"type": "bytes16"
-			},
-			{
-				"indexed": false,
-				"name": "certHash",
-				"type": "bytes16"
-			}
-		],
-		"name": "AddCertificate",
-		"type": "event"
-	},
-	{
-		"constant": false,
-		"inputs": [
-			{
-				"name": "issuerPubkey",
-				"type": "bytes16"
-			},
-			{
-				"name": "issuerName",
-				"type": "bytes16"
-			}
-		],
-		"name": "registerIssuer",
-		"outputs": [],
-		"payable": false,
-		"stateMutability": "nonpayable",
-		"type": "function"
-	},
-	{
-		"constant": false,
-		"inputs": [
-			{
-				"name": "userHash",
-				"type": "bytes16"
-			},
-			{
-				"name": "userName",
-				"type": "bytes16"
-			}
-		],
-		"name": "registerUser",
-		"outputs": [],
-		"payable": false,
-		"stateMutability": "nonpayable",
-		"type": "function"
-	},
-	{
-		"constant": false,
-		"inputs": [
-			{
-				"name": "newOwner",
-				"type": "address"
-			}
-		],
-		"name": "transferOwnership",
-		"outputs": [],
-		"payable": false,
-		"stateMutability": "nonpayable",
-		"type": "function"
-	},
-	{
-		"constant": true,
-		"inputs": [
-			{
-				"name": "userHash",
-				"type": "bytes16"
-			},
-			{
-				"name": "certHash",
-				"type": "bytes16"
-			}
-		],
-		"name": "isCertificate",
-		"outputs": [],
-		"payable": false,
-		"stateMutability": "view",
-		"type": "function"
-	},
-	{
-		"constant": true,
-		"inputs": [
-			{
-				"name": "",
-				"type": "bytes16"
-			},
-			{
-				"name": "",
-				"type": "bytes16"
-			}
-		],
-		"name": "mapCertificates",
-		"outputs": [
-			{
-				"name": "state",
-				"type": "uint8"
 			},
 			{
 				"name": "issuerPubkey",
-				"type": "bytes16"
-			},
-			{
-				"name": "certHash",
 				"type": "bytes16"
 			},
 			{
 				"name": "issuerSignature",
 				"type": "bytes16"
+			},
+			{
+				"name": "certHash",
+				"type": "bytes16"
 			}
 		],
+		"name": "addCertificate",
+		"outputs": [],
 		"payable": false,
-		"stateMutability": "view",
+		"stateMutability": "nonpayable",
 		"type": "function"
 	},
 	{
@@ -353,11 +122,211 @@ var cvssledgerContractABI = [
 		"payable": false,
 		"stateMutability": "view",
 		"type": "function"
+	},
+	{
+		"constant": true,
+		"inputs": [
+			{
+				"name": "",
+				"type": "bytes16"
+			},
+			{
+				"name": "",
+				"type": "bytes16"
+			}
+		],
+		"name": "mapCertificates",
+		"outputs": [
+			{
+				"name": "state",
+				"type": "uint8"
+			},
+			{
+				"name": "issuerPubkey",
+				"type": "bytes16"
+			},
+			{
+				"name": "certHash",
+				"type": "bytes16"
+			},
+			{
+				"name": "issuerSignature",
+				"type": "bytes16"
+			}
+		],
+		"payable": false,
+		"stateMutability": "view",
+		"type": "function"
+	},
+	{
+		"constant": false,
+		"inputs": [
+			{
+				"name": "newOwner",
+				"type": "address"
+			}
+		],
+		"name": "transferOwnership",
+		"outputs": [],
+		"payable": false,
+		"stateMutability": "nonpayable",
+		"type": "function"
+	},
+	{
+		"constant": false,
+		"inputs": [
+			{
+				"name": "userHash",
+				"type": "bytes16"
+			}
+		],
+		"name": "deleteUser",
+		"outputs": [],
+		"payable": false,
+		"stateMutability": "nonpayable",
+		"type": "function"
+	},
+	{
+		"constant": false,
+		"inputs": [
+			{
+				"name": "issuerPubkey",
+				"type": "bytes16"
+			},
+			{
+				"name": "issuerName",
+				"type": "bytes16"
+			}
+		],
+		"name": "registerIssuer",
+		"outputs": [],
+		"payable": false,
+		"stateMutability": "nonpayable",
+		"type": "function"
+	},
+	{
+		"anonymous": false,
+		"inputs": [
+			{
+				"indexed": false,
+				"name": "ownerHash",
+				"type": "bytes16"
+			},
+			{
+				"indexed": false,
+				"name": "userName",
+				"type": "bytes16"
+			},
+			{
+				"indexed": false,
+				"name": "issuerPubkey",
+				"type": "bytes16"
+			},
+			{
+				"indexed": false,
+				"name": "issuerSignature",
+				"type": "bytes16"
+			},
+			{
+				"indexed": false,
+				"name": "certHash",
+				"type": "bytes16"
+			}
+		],
+		"name": "AddCertificate",
+		"type": "event"
+	},
+	{
+		"anonymous": false,
+		"inputs": [
+			{
+				"indexed": false,
+				"name": "issuerPubkey",
+				"type": "bytes16"
+			},
+			{
+				"indexed": false,
+				"name": "issuerName",
+				"type": "bytes16"
+			}
+		],
+		"name": "RegisterIssuer",
+		"type": "event"
+	},
+	{
+		"anonymous": false,
+		"inputs": [
+			{
+				"indexed": false,
+				"name": "userHash",
+				"type": "bytes16"
+			},
+			{
+				"indexed": false,
+				"name": "userName",
+				"type": "bytes16"
+			}
+		],
+		"name": "RegisterUser",
+		"type": "event"
+	},
+	{
+		"anonymous": false,
+		"inputs": [
+			{
+				"indexed": false,
+				"name": "",
+				"type": "string"
+			}
+		],
+		"name": "LogMessage",
+		"type": "event"
+	},
+	{
+		"anonymous": false,
+		"inputs": [
+			{
+				"indexed": false,
+				"name": "userHash",
+				"type": "bytes16"
+			}
+		],
+		"name": "DeleteUser",
+		"type": "event"
+	},
+	{
+		"anonymous": false,
+		"inputs": [
+			{
+				"indexed": false,
+				"name": "issuerPubkey",
+				"type": "bytes16"
+			}
+		],
+		"name": "DeleteIssuer",
+		"type": "event"
+	},
+	{
+		"anonymous": false,
+		"inputs": [
+			{
+				"indexed": true,
+				"name": "previousOwner",
+				"type": "address"
+			},
+			{
+				"indexed": true,
+				"name": "newOwner",
+				"type": "address"
+			}
+		],
+		"name": "OwnershipTransferred",
+		"type": "event"
 	}
 ]
 // Contract address
-exports.CONTRACT_ADDRESS = "0x834aab9d6b24efa9b4e1a2abfe3b9b2c4cdc0e22"
-var CONTRACT_ADDRESS_INTERNAL = "0x834aab9d6b24efa9b4e1a2abfe3b9b2c4cdc0e22"
+exports.CONTRACT_ADDRESS = "0x6c74e9244d3afea534a2e56a4a8a3cc947392e01"
+var CONTRACT_ADDRESS_INTERNAL = "0x6c74e9244d3afea534a2e56a4a8a3cc947392e01"
 // Create Smart Contract using address (in Ethereum Blockhain) and ABI
 exports.cvssledgerContract = new web3.eth.Contract(cvssledgerContractABI, CONTRACT_ADDRESS_INTERNAL)
 
