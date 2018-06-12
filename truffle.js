@@ -30,9 +30,9 @@ engine.start();
 // to customize your Truffle configuration!
 module.exports = {
   networks: {
-    development: {
+    testrpc: {
       host: 'localhost',
-      port: 8545,
+      port: 9545,
       network_id: '*' // Match any network id
     },
     ropsten: {
