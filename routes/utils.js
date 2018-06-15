@@ -23,8 +23,41 @@ exports.CreateAndBroadcastTx = function (privateKey, dataRegister, callback)
 	return web3.eth.accounts.signTransaction(
 		{
 			data: dataRegister,
-			gas: 300000,
+			gas: 600000,
 			to: CONTRACT_ADDRESS
+		}, 
+		privateKey,
+		function (err, res) {
+			if (err) return Promise.reject(err);
+
+			console.log(err);
+
+			console.log(res)
+
+			//get raw transaction
+			const signedTransaction = res.rawTransaction;
+			
+			//broadcast signed transaction
+			web3.eth.sendSignedTransaction(signedTransaction, (err, res) => {
+
+				console.log(err);
+
+				console.log(res);
+				//callback('https://ropsten.etherscan.io/tx/' + res)
+				callback(res)
+				return res;
+			});
+		}
+	);
+}
+exports.CreateAndBroadcastTxWithNonce = function (privateKey, dataRegister, _nonce, callback)
+{
+	return web3.eth.accounts.signTransaction(
+		{
+			data: dataRegister,
+			gas: 600000,
+			to: CONTRACT_ADDRESS,
+			nonce: _nonce
 		}, 
 		privateKey,
 		function (err, res) {
